@@ -1,0 +1,30 @@
+# Nebulara Standard Library - Primitives
+# Type checking and basic operations
+
+FUNC! is_string(v):
+  RETURN TYPEOF(v) == "string"
+END!
+
+FUNC! is_number(v):
+  RETURN TYPEOF(v) == "int"
+END!
+
+FUNC! is_bool(v):
+  RETURN TYPEOF(v) == "bool"
+END!
+
+FUNC! is_array(v):
+  RETURN TYPEOF(v) == "array"
+END!
+
+FUNC! is_null(v):
+  RETURN TYPEOF(v) == "null"
+END!
+
+FUNC! to_int(v):
+  RETURN TO_NUMBER(v)
+END!
+
+FUNC! to_str(v):
+  RETURN TO_STRING(v)
+END!

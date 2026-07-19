@@ -1,0 +1,8 @@
+# Minimal CONTINUE test
+LET i = 0
+FOR! j = 1 TO 5:
+  j = j + 1
+  CONTINUE
+  PRINT j
+END!
+PRINT "done"

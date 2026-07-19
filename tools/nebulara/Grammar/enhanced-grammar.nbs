@@ -1,0 +1,81 @@
+# Enhanced Grammar - Python/C++ Level
+# Grammar/enhanced-grammar.nbs
+
+# Core statements
+RULE! "program" -> "stmt*"
+
+RULE! "stmt" -> 
+  "import_stmt" |
+  "func_def" |
+  "data_def" |
+  "run_block" |
+  "print_stmt" |
+  "expr_stmt" |
+  "if_stmt" |
+  "for_stmt" |
+  "while_stmt" |
+  "return_stmt" |
+  "class_def"
+
+# Classes (C++/Python level)
+RULE! "class_def" -> "CLASS IDENT" "implements_list"? "{" "class_body*" "}"
+
+RULE! "implements_list" -> "IMPLEMENTS" "IDENT*"
+
+RULE! "class_body" -> 
+  "field_def" |
+  "method_def"
+
+RULE! "field_def" -> "IDENT" ":" "type" ("=" "expr")?
+
+RULE! "method_def" -> "FUNC!" "IDENT" "(" "params?" ")"
+
+# Advanced types
+RULE! "type" ->
+  "IDENT" |
+  "type" "ARRAY" |
+  "type" "?" |           # Optional
+  "FUNC" "(" "types?" ")" "->" "type" |  # Function type
+  "(" "types?" ")"       # Tuple
+
+# Control flow
+RULE! "if_stmt" -> "IF?" "expr" ":" "stmt*" "ENDIF"
+RULE! "for_stmt" -> "FOR!" "IDENT" "IN" "expr" ":" "stmt*" "ENDFOR"
+RULE! "while_stmt" -> "WHILE?" "expr" ":" "stmt*" "ENDWHILE"
+RULE! "match_stmt" -> "MATCH!" "expr" "{" "arm*" "}"
+RULE! "arm" -> "PATTERN" "ARROW" "stmt*"
+
+# Pattern matching
+RULE! "pattern" ->
+  "_" |                   # Wildcard
+  "IDENT" |               # Binding
+  "PATTERN" "pattern*" |  # Constructor
+  "INT" |
+  "STRING" |
+  "pattern" "|" "pattern"
+
+# Async/Traits
+RULE! "async_stmt" -> "ASYNC" "IDENT"
+RULE! "await_expr" -> "AWAIT" "expr"
+
+# Operators
+RULE! "expr" -> "expr" "binop" "expr"
+RULE! "binop" ->
+  "+" | "-" | "*" | "/" | "%" |
+  "==" | "!=" | "<" | ">" | "<=" | ">=" |
+  "AND" | "OR" | "XOR"
+
+# Literals
+RULE! "literal" ->
+  "INT" | "FLOAT" | 
+  "STRING" | "BOOL" |
+  "[" "expr*" "]" |  # Array
+  "{" "pair*" "}"    # Map
+
+# Lambda/Closure
+RULE! "lambda" -> "(" "params?" ")" "=>" "expr"
+RULE! "closure" -> "IDENT" "{" "capture*" "stmt*" "}"
+
+# Memory/Unsafe
+RULE! "ptr_expr" -> "&" "expr" | "*" "expr"
+RULE! "alloc_stmt" -> "ALLOC!" "expr" "AS" "TYPE"

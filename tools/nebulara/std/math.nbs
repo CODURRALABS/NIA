@@ -1,0 +1,52 @@
+# Nebulara Standard Library - Math
+# Basic math operations (built-in as VM opcodes)
+
+FUNC! abs(x):
+  IF? x < 0:
+    RETURN -x
+  END!
+  RETURN x
+END!
+
+FUNC! min(a, b):
+  IF? a < b:
+    RETURN a
+  END!
+  RETURN b
+END!
+
+FUNC! max(a, b):
+  IF? a > b:
+    RETURN a
+  END!
+  RETURN b
+END!
+
+FUNC! clamp(value, lo, hi):
+  IF? value < lo:
+    RETURN lo
+  END!
+  IF? value > hi:
+    RETURN hi
+  END!
+  RETURN value
+END!
+
+FUNC! sum_array(arr):
+  LET total = 0
+  LET i = 0
+  LET len = LEN(arr)
+  WHILE? i < len:
+    total = total + arr[i]
+    i = i + 1
+  END!
+  RETURN total
+END!
+
+FUNC! average(arr):
+  LET len = LEN(arr)
+  IF? len == 0:
+    RETURN 0
+  END!
+  RETURN sum_array(arr) / len
+END!

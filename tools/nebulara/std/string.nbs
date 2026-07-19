@@ -1,0 +1,71 @@
+# Nebulara Standard Library - String
+# String manipulation utilities (using built-in functions)
+
+FUNC! concat(a, b):
+  RETURN a + b
+END!
+
+FUNC! repeat(s, n):
+  LET result = ""
+  LET i = 0
+  WHILE? i < n:
+    result = result + s
+    i = i + 1
+  END!
+  RETURN result
+END!
+
+FUNC! reverse(s):
+  LET len = LEN(s)
+  LET result = ""
+  LET i = len - 1
+  WHILE? i >= 0:
+    result = result + CHAR_AT(s, i)
+    i = i - 1
+  END!
+  RETURN result
+END!
+
+FUNC! contains(s, sub):
+  LET slen = LEN(s)
+  LET sublen = LEN(sub)
+  IF? sublen == 0:
+    RETURN TRUE
+  END!
+  IF? sublen > slen:
+    RETURN FALSE
+  END!
+  LET i = 0
+  WHILE? i <= slen - sublen:
+    LET match = TRUE
+    LET j = 0
+    WHILE? j < sublen:
+      IF? CHAR_AT(s, i + j) != CHAR_AT(sub, j):
+        match = FALSE
+        BREAK
+      END!
+      j = j + 1
+    END!
+    IF? match == TRUE:
+      RETURN TRUE
+    END!
+    i = i + 1
+  END!
+  RETURN FALSE
+END!
+
+FUNC! to_upper(s):
+  RETURN TO_UPPER(s)
+END!
+
+FUNC! to_lower(s):
+  RETURN TO_LOWER(s)
+END!
+
+FUNC! trim(s):
+  RETURN TRIM(s)
+END!
+
+FUNC! substring(s, start, len):
+  RETURN SUBSTR(s, start, len)
+END!

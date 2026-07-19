@@ -1,0 +1,19 @@
+{
+    "nodes": [
+        {
+            "id": "Project_NIA",
+            "type": "Project"
+        },
+        {
+            "id": "Ayush",
+            "type": "Sovereign"
+        }
+    ],
+    "relations": [
+        {
+            "source": "Project_NIA",
+            "target": "Ayush",
+            "type": "DEVELOPED_BY"
+        }
+    ]
+}

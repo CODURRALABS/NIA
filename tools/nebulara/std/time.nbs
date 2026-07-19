@@ -1,0 +1,15 @@
+# Nebulara Standard Library - Time
+# Time and date utilities
+
+FUNC! now():
+  RETURN TIME()
+END!
+
+FUNC! elapsed(start_time):
+  RETURN TIME() - start_time
+END!
+
+# sleep is not yet implemented - requires FFI to C library
+FUNC! sleep(ms):
+  PRINT "TIME.sleep: not yet implemented - requires FFI to C library"
+END!

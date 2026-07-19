@@ -1,0 +1,7 @@
+# CONTINUE test without modulo
+FOR! m = 1 TO 10:
+  IF? m == 5:
+    CONTINUE
+  END!
+  PRINT m
+END!

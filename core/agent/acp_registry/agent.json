@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "name": "nia-agent",
+  "display_name": "NIA",
+  "description": "AI agent by Anonymousinsaan & Codurra Labs with 90+ tools, persistent memory, and multi-platform support",
+  "icon": "icon.svg",
+  "distribution": {
+    "type": "command",
+    "command": "nia",
+    "args": ["acp"]
+  }
+}

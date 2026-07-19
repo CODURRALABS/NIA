@@ -1,0 +1,15 @@
+# Nebulara Standard Library - JSON
+# Simple JSON operations (basic implementation)
+
+# JSON is not natively supported yet.
+# These are placeholder functions that demonstrate the API.
+
+FUNC! json_stringify(value):
+  RETURN TO_STRING(value)
+END!
+
+# json_parse is not yet implemented - requires FFI to C JSON parser library
+FUNC! json_parse(str):
+  PRINT "JSON.parse: not yet implemented - requires FFI to C JSON parser library"
+  RETURN NULL
+END!

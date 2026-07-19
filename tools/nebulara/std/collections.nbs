@@ -1,0 +1,72 @@
+# Nebulara Standard Library - Collections
+# Array and collection utilities
+
+FUNC! find(arr, value):
+  LET i = 0
+  LET len = LEN(arr)
+  WHILE? i < len:
+    IF? arr[i] == value:
+      RETURN i
+    END!
+    i = i + 1
+  END!
+  RETURN -1
+END!
+
+FUNC! contains(arr, value):
+  RETURN find(arr, value) != -1
+END!
+
+FUNC! reverse_array(arr):
+  LET len = LEN(arr)
+  LET result = []
+  LET i = len - 1
+  WHILE? i >= 0:
+    result = result + [arr[i]]
+    i = i - 1
+  END!
+  RETURN result
+END!
+
+FUNC! sum_array(arr):
+  LET total = 0
+  LET i = 0
+  LET len = LEN(arr)
+  WHILE? i < len:
+    total = total + arr[i]
+    i = i + 1
+  END!
+  RETURN total
+END!
+
+FUNC! max_array(arr):
+  IF? LEN(arr) == 0:
+    RETURN 0
+  END!
+  LET m = arr[0]
+  LET i = 1
+  LET len = LEN(arr)
+  WHILE? i < len:
+    IF? arr[i] > m:
+      m = arr[i]
+    END!
+    i = i + 1
+  END!
+  RETURN m
+END!
+
+FUNC! min_array(arr):
+  IF? LEN(arr) == 0:
+    RETURN 0
+  END!
+  LET m = arr[0]
+  LET i = 1
+  LET len = LEN(arr)
+  WHILE? i < len:
+    IF? arr[i] < m:
+      m = arr[i]
+    END!
+    i = i + 1
+  END!
+  RETURN m
+END!

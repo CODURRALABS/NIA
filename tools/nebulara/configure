@@ -1,0 +1,45 @@
+#!/bin/bash
+# Nebulara Build Configuration Script
+
+echo "=== Nebulara Build Configuration ==="
+
+# Check for GCC
+if command -v gcc &> /dev/null; then
+    echo "[OK] GCC found: $(gcc --version | head -1)"
+else
+    echo "[FAIL] GCC not found. Install MinGW-w64 or gcc."
+    exit 1
+fi
+
+# Build
+echo ""
+echo "Building nebulara..."
+mkdir -p build
+gcc -static -O2 -Wall "Compiler/nbs-bootstrap.c" -o "build/nebulara"
+if [ $? -eq 0 ]; then
+    echo "[OK] build/nebulara built successfully"
+else
+    echo "[FAIL] Build failed"
+    exit 1
+fi
+
+gcc -static -O2 -Wall "Compiler/nbs_cli.c" -o "build/neb-cli" -lm
+if [ $? -eq 0 ]; then
+    echo "[OK] build/neb-cli built successfully"
+else
+    echo "[FAIL] CLI build failed"
+    exit 1
+fi
+
+# Run test
+echo ""
+echo "Running test..."
+build/nebulara test/hello.nbs
+if [ $? -eq 0 ]; then
+    echo "[OK] Test passed"
+else
+    echo "[FAIL] Test failed"
+fi
+
+echo ""
+echo "Done. Run: ./build/nebulara test/hello.nbs"

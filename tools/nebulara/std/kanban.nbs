@@ -1,0 +1,122 @@
+# Nebulara Standard Library - Kanban
+# Task board data structures and operations
+# Uses arrays for columns and a flat task list
+
+# Board state: four column arrays storing task IDs, and a tasks array
+LET _todo = []
+LET _in_progress = []
+LET _review = []
+LET _done = []
+LET _tasks = []
+LET _next_id = 1
+
+# Create a new task and add it to the todo column
+FUNC! create_task(title, description, priority):
+  LET task = [_next_id, title, description, priority, "todo"]
+  _tasks = _tasks + [task]
+  _todo = _todo + [_next_id]
+  _next_id = _next_id + 1
+  RETURN task[0]
+END!
+
+# Move a task to a new column
+# status must be: "todo", "in_progress", "review", or "done"
+FUNC! move_task(task_id, new_status):
+  LET i = 0
+  LET len = LEN(_tasks)
+  WHILE? i < len:
+    IF? _tasks[i][0] == task_id:
+      LET old_status = _tasks[i][4]
+      IF? old_status == new_status:
+        RETURN TRUE
+      END!
+      _tasks[i][4] = new_status
+      # Remove task_id from old column
+      IF? old_status == "todo":
+        _todo = _remove_id(_todo, task_id)
+      END!
+      IF? old_status == "in_progress":
+        _in_progress = _remove_id(_in_progress, task_id)
+      END!
+      IF? old_status == "review":
+        _review = _remove_id(_review, task_id)
+      END!
+      IF? old_status == "done":
+        _done = _remove_id(_done, task_id)
+      END!
+      # Add task_id to new column
+      IF? new_status == "todo":
+        _todo = _todo + [task_id]
+      END!
+      IF? new_status == "in_progress":
+        _in_progress = _in_progress + [task_id]
+      END!
+      IF? new_status == "review":
+        _review = _review + [task_id]
+      END!
+      IF? new_status == "done":
+        _done = _done + [task_id]
+      END!
+      RETURN TRUE
+    END!
+    i = i + 1
+  END!
+  RETURN FALSE
+END!
+
+# Get a task by ID, returns the task array or NULL
+FUNC! get_task(task_id):
+  LET i = 0
+  LET len = LEN(_tasks)
+  WHILE? i < len:
+    IF? _tasks[i][0] == task_id:
+      RETURN _tasks[i]
+    END!
+    i = i + 1
+  END!
+  RETURN NULL
+END!
+
+# Print the full board state
+FUNC! print_board():
+  PRINT "=== TODO ==="
+  _print_column(_todo)
+  PRINT "=== IN PROGRESS ==="
+  _print_column(_in_progress)
+  PRINT "=== REVIEW ==="
+  _print_column(_review)
+  PRINT "=== DONE ==="
+  _print_column(_done)
+END!
+
+# Print task summary for a list of task IDs
+FUNC! _print_column(column):
+  LET i = 0
+  LET len = LEN(column)
+  WHILE? i < len:
+    LET task = get_task(column[i])
+    IF? task != NULL:
+      PRINT task[0] + ": " + task[1] + " [" + task[3] + "]"
+    END!
+    i = i + 1
+  END!
+END!
+
+# Remove a task ID from an array of IDs, return new array
+FUNC! _remove_id(arr, task_id):
+  LET result = []
+  LET i = 0
+  LET len = LEN(arr)
+  WHILE? i < len:
+    IF? arr[i] != task_id:
+      result = result + [arr[i]]
+    END!
+    i = i + 1
+  END!
+  RETURN result
+END!
+
+# Count tasks in a column
+FUNC! column_count(column):
+  RETURN LEN(column)
+END!

@@ -1,0 +1,23 @@
+# Test: Recursion - factorial and fibonacci
+FUNC! factorial(n):
+  IF? n <= 1:
+    RETURN 1
+  END!
+  RETURN n * factorial(n - 1)
+END!
+
+FUNC! fibonacci(n):
+  IF? n <= 0:
+    RETURN 0
+  END!
+  IF? n == 1:
+    RETURN 1
+  END!
+  RETURN fibonacci(n - 1) + fibonacci(n - 2)
+END!
+
+PRINT "Recursion tests:"
+PRINT factorial(5)
+PRINT factorial(10)
+PRINT fibonacci(10)
+PRINT fibonacci(15)

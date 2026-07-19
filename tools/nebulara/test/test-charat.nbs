@@ -1,0 +1,7 @@
+LET s = "hello"
+LET c = CHAR_AT(s, 0)
+PRINT(c)
+LET c2 = CHAR_AT(s, 1)
+PRINT(c2)
+LET c3 = CHAR_AT(s, 4)
+PRINT(c3)

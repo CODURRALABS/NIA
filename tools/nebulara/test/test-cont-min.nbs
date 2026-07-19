@@ -1,0 +1,7 @@
+# Minimal CONTINUE test
+FOR! i = 1 TO 5:
+  IF? i == 3:
+    CONTINUE
+  END!
+  PRINT i
+END!

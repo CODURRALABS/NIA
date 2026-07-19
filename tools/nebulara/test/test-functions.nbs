@@ -1,0 +1,13 @@
+# Test: Functions with parameters
+FUNC! add(a, b):
+  RETURN a + b
+END!
+
+FUNC! multiply(a, b):
+  RETURN a * b
+END!
+
+PRINT "Function tests:"
+PRINT add(3, 4)
+PRINT multiply(5, 6)
+PRINT add(10, 20)

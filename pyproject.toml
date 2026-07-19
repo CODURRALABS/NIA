@@ -1,0 +1,20 @@
+[project]
+name = "omni-500"
+version = "0.1.0"
+description = "Sovereign 500M MoE Reasoning & Coding Ecosystem"
+readme = "README.md"
+requires-python = ">=3.10"
+
+dependencies = [
+    "torch>=2.6",
+    "tensorrt",
+    "opencv-python",
+    "datasets",
+    "transformers",
+    "accelerate",
+    "bitsandbytes",
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"

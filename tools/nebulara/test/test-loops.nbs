@@ -1,0 +1,17 @@
+# Test: Loops - WHILE and FOR
+PRINT "WHILE loop (count to 5):"
+LET i = 1
+WHILE? i <= 5:
+  PRINT i
+  i = i + 1
+END!
+
+PRINT "FOR loop (1 to 5):"
+FOR! j = 1 TO 5:
+  PRINT j
+END!
+
+PRINT "FOR loop with STEP:"
+FOR! k = 0 TO 20 STEP 5:
+  PRINT k
+END!

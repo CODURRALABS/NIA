@@ -1,0 +1,7 @@
+{
+    "init_latency_s": 20.34367871284485,
+    "mem_peak_mb": 2463.51171875,
+    "mem_idle_mb": 2464.4609375,
+    "vsa_latency_ms": 0.34427642822265625,
+    "stability": "High"
+}

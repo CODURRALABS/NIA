@@ -1,0 +1,32 @@
+{
+  "name": "@codurra/nebulara",
+  "version": "2.0.0",
+  "description": "Nebulara - AI-native universal programming language ecosystem",
+  "main": "dist/index.js",
+  "bin": {
+    "neb": "bin/neb.js",
+    "nebulara": "bin/neb.js"
+  },
+  "scripts": {
+    "build": "node scripts/build.js",
+    "test": "node scripts/test.js",
+    "clean": "node -e \"require('fs').rmSync('build',{recursive:true,force:true})\"",
+    "prepublishOnly": "npm run build"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "files": [
+    "bin/",
+    "dist/",
+    "build/",
+    "Compiler/",
+    "std/",
+    "test/",
+    "SPEC.md",
+    "README.md"
+  ],
+  "keywords": ["compiler", "programming-language", "ai-native", "nebulara"],
+  "author": "Codurra",
+  "license": "UNLICENSED",
+  "private": true
+}

@@ -1,0 +1,22 @@
+# Test: Arrays
+PRINT "Array tests:"
+LET arr = [10, 20, 30, 40, 50]
+PRINT arr[0]
+PRINT arr[2]
+PRINT arr[4]
+
+PRINT "Array length:"
+PRINT LEN(arr)
+
+PRINT "Array sum:"
+LET total = 0
+FOR! i = 0 TO 4:
+  total = total + arr[i]
+END!
+PRINT total
+
+PRINT "Array with strings:"
+LET words = ["hello", "world", "nebulara"]
+PRINT words[0]
+PRINT words[1]
+PRINT LEN(words)

@@ -1,0 +1,11 @@
+TRY!:
+    PRINT("try start")
+    THROW "something went wrong"
+    PRINT("should not print")
+CATCH! err:
+    PRINT("caught: " + err)
+ENDTRY!
+PRINT("after try")
+
+LET x = 5
+PRINT(x)

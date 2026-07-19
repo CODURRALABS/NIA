@@ -1,0 +1,5 @@
+# Minimal modulo test
+LET m = 4
+PRINT m % 2
+LET n = 5
+PRINT n % 2

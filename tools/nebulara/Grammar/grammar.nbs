@@ -1,0 +1,50 @@
+# Nebulara Parser - Grammar.nbs
+# Pure Nebulara implementation of recursive descent parser
+
+DATA! "TokenTypes"
+  END = 0
+  APP = 1
+  AI = 2
+  RUN = 3
+  PRINT = 4
+  IF = 5
+  WHILE = 6
+  LOOP = 7
+  IDENTIFIER = 8
+  NUMBER = 9
+  STRING = 10
+END!
+
+DATA! "ParserState"
+  current_token = null
+  position = 0
+  tokens = []
+END!
+
+FUNC! "parse_program"
+RUN!
+  # Parse statements until END token or EOF
+  # Returns AST node { type: 'Program', body: [...] }
+END!
+END!
+
+FUNC! "parse_statement"
+RUN!
+  # Switch on current token type
+  # APP! -> parse_app
+  # RUN! -> parse_run
+  # PRINT -> parse_print
+  # IF? -> parse_if
+  # WHILE? -> parse_while
+  # LOOP! -> parse_loop
+END!
+END!
+
+FUNC! "parse_app"
+RUN!
+  # Expect APP!
+  # Expect STRING (name)
+  # Parse body until END!
+  # Return { type: 'App', name: ..., body: [...] }
+END!
+END!

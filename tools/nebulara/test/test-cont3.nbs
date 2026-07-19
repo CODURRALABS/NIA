@@ -1,0 +1,7 @@
+# CONTINUE with modulo
+FOR! m = 1 TO 10:
+  IF? m % 2 == 0:
+    CONTINUE
+  END!
+  PRINT m
+END!
