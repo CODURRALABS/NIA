@@ -46,7 +46,7 @@ class ModelBackend(Enum):
 FREE_PROVIDERS = [
     {
         "name": "siliconflow",
-        "url": "https://api.siliconflow.cn/v1/chat/completions",
+        "url": "https://api.siliconflow.com/v1/chat/completions",
         "key_env": "SILICONFLOW_API_KEY",
         "models": ["Qwen/Qwen3-8B", "THUDM/GLM-4-9B-Chat", "meta-llama/Meta-Llama-3.1-8B-Instruct"],
     },
@@ -54,7 +54,7 @@ FREE_PROVIDERS = [
         "name": "nvidia_nim",
         "url": "https://integrate.api.nvidia.com/v1/chat/completions",
         "key_env": "NVIDIA_API_KEY",
-        "models": ["nvidia/llama-3.1-nemotron-70b-instruct", "meta/llama-3.1-8b-instruct"],
+        "models": ["meta/llama-3.1-70b-instruct", "meta/llama-3.1-8b-instruct"],
     },
     {
         "name": "openrouter_free",
