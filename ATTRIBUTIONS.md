@@ -17,6 +17,7 @@ NIA is built on top of outstanding open-source projects. We are grateful to thei
 | [Holographic](https://github.com/holographic-ai/holographic) | Holographic AI | MIT | `core/pulse/memories/` | Holographic memory pattern |
 | [ByteRover](https://github.com/biterover/ByteRover) | ByteRover | MIT | `core/pulse/agents/` | Browser action patterns |
 | [OpenCode](https://github.com/opencode-ai/opencode) | OpenCode | MIT | `core/pulse/runtime/` | CLI interface patterns |
+| [OmniRoute](https://github.com/diegosouzapw/OmniRoute) | Diego Souza | MIT | `core/pulse/runtime/model_router.py` | Free provider aggregation pattern (iFlow, Qwen, SiliconFlow, NVIDIA NIM, OpenRouter) |
 | [vLLM](https://github.com/vllm-project/vllm) | vLLM Project | Apache 2.0 | `requirements.txt` | Model serving backend |
 | [LiveKit](https://github.com/livekit/livekit) | LiveKit | BSD-2 | `requirements.txt` | Voice infrastructure |
 | [LangChain](https://github.com/langchain-ai/langchain) | LangChain | MIT | `requirements.txt` | Agent patterns |

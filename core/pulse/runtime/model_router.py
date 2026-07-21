@@ -41,6 +41,40 @@ class ModelBackend(Enum):
     INTERPRETER = "interpreter"
     LANGGRAPH = "langgraph"
     NEBULARA = "nebulara"
+    FREE_PROVIDER = "free_provider"
+
+FREE_PROVIDERS = [
+    {
+        "name": "iflow",
+        "url": "https://api.iflow.cn/v1/chat/completions",
+        "key_env": "IFLOW_API_KEY",
+        "models": ["kimi-k2-thinking", "qwen3-coder-plus", "deepseek-r1", "kimi-k2"],
+    },
+    {
+        "name": "qwen",
+        "url": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
+        "key_env": "QWEN_API_KEY",
+        "models": ["qwen3-coder-plus", "qwen3-coder-flash", "qwen3-coder-next"],
+    },
+    {
+        "name": "siliconflow",
+        "url": "https://api.siliconflow.cn/v1/chat/completions",
+        "key_env": "SILICONFLOW_API_KEY",
+        "models": ["Qwen/Qwen3-8B", "THUDM/GLM-4-9B-Chat", "meta-llama/Meta-Llama-3.1-8B-Instruct"],
+    },
+    {
+        "name": "nvidia_nim",
+        "url": "https://integrate.api.nvidia.com/v1/chat/completions",
+        "key_env": "NVIDIA_API_KEY",
+        "models": ["nvidia/llama-3.1-nemotron-70b-instruct", "meta/llama-3.1-8b-instruct"],
+    },
+    {
+        "name": "openrouter_free",
+        "url": "https://openrouter.ai/api/v1/chat/completions",
+        "key_env": "OPENROUTER_API_KEY",
+        "models": ["mistralai/mistral-7b-instruct:free", "meta-llama/llama-3.1-8b-instruct:free"],
+    },
+]
 
 
 INTENT_PATTERNS = {
@@ -103,6 +137,23 @@ class ModelRouter:
     def initialize(self) -> Dict[str, bool]:
         """Probe all backends and report availability."""
         backends = {}
+
+        # Free providers (OpenAI-compatible)
+        self._available_free = []
+        for provider in FREE_PROVIDERS:
+            api_key = os.environ.get(provider["key_env"], "")
+            if api_key:
+                self._available_free.append(provider)
+                backends[f"free_{provider['name']}"] = True
+                logger.info("Free provider %s: available (%d models)", provider["name"], len(provider["models"]))
+            else:
+                backends[f"free_{provider['name']}"] = False
+
+        if self._available_free:
+            self._backends_available[ModelBackend.FREE_PROVIDER] = True
+            logger.info("Free providers: %d configured", len(self._available_free))
+        else:
+            self._backends_available[ModelBackend.FREE_PROVIDER] = False
 
         # HF Inference API
         if self._hf_token:
@@ -325,6 +376,56 @@ class ModelRouter:
         self._backends_available[ModelBackend.HF_API] = False
         return {"error": "All HF models failed or rate-limited", "success": False}
 
+    def generate_free(self, prompt: str, max_tokens: int = 512,
+                       temperature: float = 0.7) -> Dict[str, Any]:
+        """
+        Generate text via free OpenAI-compatible providers (iFlow, Qwen, SiliconFlow, NVIDIA NIM, OpenRouter).
+        Tries each provider's models in order until one succeeds.
+        """
+        for provider in self._available_free:
+            api_key = os.environ.get(provider["key_env"], "")
+            if not api_key:
+                continue
+
+            for model in provider["models"]:
+                try:
+                    headers = {
+                        "Authorization": f"Bearer {api_key}",
+                        "Content-Type": "application/json",
+                    }
+                    payload = {
+                        "model": model,
+                        "messages": [{"role": "user", "content": prompt}],
+                        "max_tokens": max_tokens,
+                        "temperature": temperature,
+                    }
+                    resp = requests.post(
+                        provider["url"],
+                        headers=headers,
+                        json=payload,
+                        timeout=15,
+                    )
+
+                    if resp.status_code == 200:
+                        data = resp.json()
+                        text = data["choices"][0]["message"]["content"]
+                        logger.info("Free provider %s/%s success", provider["name"], model)
+                        return {"output": text.strip(), "model": f"{provider['name']}/{model}", "success": True}
+
+                    logger.warning("Free provider %s/%s returned %d", provider["name"], model, resp.status_code)
+
+                except requests.Timeout:
+                    logger.warning("Free provider %s/%s timeout", provider["name"], model)
+                    continue
+                except requests.ConnectionError:
+                    logger.warning("Free provider %s unreachable", provider["name"])
+                    break
+                except Exception as e:
+                    logger.warning("Free provider %s/%s error: %s", provider["name"], model, e)
+                    continue
+
+        return {"error": "All free providers failed", "success": False}
+
     def generate_local(self, prompt: str, max_tokens: int = 256) -> Dict[str, Any]:
         """Generate text via local model (lazy-loaded)."""
         import torch
@@ -370,17 +471,28 @@ class ModelRouter:
     def generate(self, prompt: str, backend: ModelBackend = None, **kwargs) -> Dict[str, Any]:
         """
         High-level generate: picks the best backend if not specified.
-        Falls back from HF API -> local model on failure.
+        Falls back: Free providers -> HF API -> local model.
         """
         if backend is None:
-            if self._backends_available.get(ModelBackend.HF_API):
+            if self._backends_available.get(ModelBackend.FREE_PROVIDER):
+                backend = ModelBackend.FREE_PROVIDER
+            elif self._backends_available.get(ModelBackend.HF_API):
                 backend = ModelBackend.HF_API
             elif self._backends_available.get(ModelBackend.LOCAL):
                 backend = ModelBackend.LOCAL
             else:
                 return {"error": "No backends available", "success": False}
 
-        if backend == ModelBackend.HF_API:
+        if backend == ModelBackend.FREE_PROVIDER:
+            result = self.generate_free(prompt, **kwargs)
+            if not result.get("success"):
+                logger.info("Free providers failed, trying HF API...")
+                self._stats["fallback"] += 1
+                if self._backends_available.get(ModelBackend.HF_API):
+                    return self.generate_hf(prompt, **kwargs)
+                return self.generate_local(prompt, max_tokens=kwargs.get("max_tokens", 256))
+            return result
+        elif backend == ModelBackend.HF_API:
             result = self.generate_hf(prompt, **kwargs)
             if not result.get("success"):
                 logger.info("HF API failed, falling back to local model.")
