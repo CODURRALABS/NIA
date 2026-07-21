@@ -65,10 +65,33 @@ class SovereignWebEngine:
             pass
 
     def fast_search(self, query: str, max_results=5) -> List[Dict[str, str]]:
-        """Sovereign Search — Firecrawl primary, DuckDuckGo fallback."""
+        """Sovereign Search — iFlow primary, Firecrawl secondary, DuckDuckGo fallback."""
         results = []
 
-        # Primary: Firecrawl search (structured, high-quality)
+        # Primary: iFlow Search API (free, structured)
+        iflow_key = os.environ.get("IFLOW_API_KEY", "")
+        if iflow_key:
+            try:
+                resp = requests.post(
+                    "https://platform.iflow.cn/api/search/webSearch",
+                    headers={"Authorization": f"Bearer {iflow_key}", "Content-Type": "application/json", "Accept": "application/json"},
+                    json={"keywords": query, "num": max_results},
+                    timeout=10,
+                )
+                if resp.status_code == 200:
+                    data = resp.json()
+                    for item in data.get("data", {}).get("organic", [])[:max_results]:
+                        results.append({
+                            "title": item.get("title", ""),
+                            "link": item.get("link", ""),
+                            "snippet": item.get("snippet", "")[:300],
+                        })
+                    if results:
+                        return results
+            except Exception:
+                pass
+
+        # Secondary: Firecrawl search
         try:
             from firecrawl_engine import get_firecrawl
             fc = get_firecrawl()

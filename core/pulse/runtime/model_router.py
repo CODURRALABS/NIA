@@ -45,18 +45,6 @@ class ModelBackend(Enum):
 
 FREE_PROVIDERS = [
     {
-        "name": "iflow",
-        "url": "https://api.iflow.cn/v1/chat/completions",
-        "key_env": "IFLOW_API_KEY",
-        "models": ["kimi-k2-thinking", "qwen3-coder-plus", "deepseek-r1", "kimi-k2"],
-    },
-    {
-        "name": "qwen",
-        "url": "https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions",
-        "key_env": "QWEN_API_KEY",
-        "models": ["qwen3-coder-plus", "qwen3-coder-flash", "qwen3-coder-next"],
-    },
-    {
         "name": "siliconflow",
         "url": "https://api.siliconflow.cn/v1/chat/completions",
         "key_env": "SILICONFLOW_API_KEY",
