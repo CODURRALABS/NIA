@@ -54,7 +54,13 @@ FREE_PROVIDERS = [
         "name": "nvidia_nim",
         "url": "https://integrate.api.nvidia.com/v1/chat/completions",
         "key_env": "NVIDIA_API_KEY",
-        "models": ["meta/llama-3.1-70b-instruct", "meta/llama-3.1-8b-instruct"],
+        "models": [
+            "meta/llama-4-maverick-17b-128e-instruct",
+            "meta/llama-3.3-70b-instruct",
+            "deepseek-ai/deepseek-v4-flash",
+            "nvidia/llama-3.3-nemotron-super-49b-v1",
+            "nvidia/llama-3.3-nemotron-super-49b-v1.5",
+        ],
     },
     {
         "name": "openrouter_free",
